@@ -1,6 +1,7 @@
 package com.example.taskmanagement.service;
 
 import com.example.taskmanagement.model.Task;
+import com.example.taskmanagement.model.User;
 import com.example.taskmanagement.repository.TaskRepository;
 import com.example.taskmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     public List<Task> findAllTasks() {
         return taskRepository.findAll();
+    }
+
+    public Task createTask(Task newTask) {
+        User assignedUser = userService.findUserById(newTask.getAssignedTo());
+
+        if (assignedUser == null) {
+            return null;
+        }
+
+        return taskRepository.save(newTask);
     }
 
 }

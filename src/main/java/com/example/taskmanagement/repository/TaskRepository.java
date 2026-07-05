@@ -26,4 +26,14 @@ public class TaskRepository {
     public List<Task> findAll() {
         return tasks;
     }
+
+    public Task save(Task task) {
+        int nextId = tasks.stream()
+                .mapToInt(Task::getId)
+                .max()
+                .orElse(0) + 1;
+        task.setId(nextId);
+        tasks.add(task);
+        return task;
+    }
 }
